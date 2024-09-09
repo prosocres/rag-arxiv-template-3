@@ -1,0 +1,13 @@
+# Unstructured related environment variables
+UNSTRUCTURED_API_KEY=M****
+
+# OpenAI related environment variables
+OPENAI_API_KEY=sk-****
+
+# Supabase related environment variables
+SUPABASE_URL=https://****
+SUPABASE_PRIVATE_KEY=eyJ****
+
+# Langchain related environment variables
+export LANGCHAIN_TRACING_V2="true"
+export LANGCHAIN_API_KEY="ls****"
