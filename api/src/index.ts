@@ -82,8 +82,5 @@ async function main({
     }
     const documents = await convertPdfToDocuments(pdfAsBuffer);
     const notes = await generateNotes(documents);
-    console.log('after notes');
-    console.log(notes);
-    console.log('length', notes.length)
 }
 main({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test'});
