@@ -66,7 +66,7 @@ async function generateNotes(
 
 async function main({
     paperUrl,
-    name,
+    //name,
     pagesToDelete
 }: {
     paperUrl: string
@@ -83,4 +83,4 @@ async function main({
     const documents = await convertPdfToDocuments(pdfAsBuffer);
     const notes = await generateNotes(documents);
 }
-main({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test'});
+main({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test' });
