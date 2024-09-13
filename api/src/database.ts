@@ -1,13 +1,10 @@
 import { SupabaseClient, 
     createClient } from "@supabase/supabase-js";
-import { ARXIV_EMBEDDINGS_TABLE, 
-    ARXIV_PAPERS_TABLE, 
-    Database } from "generated.js";
+import { Database } from "generated.js";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { Document } from "langchain/document";
 import { ArxivPaperNote } from "prompts.js";
-
 
 export class SupabaseDatabase {
     vectorStore: SupabaseVectorStore;
@@ -38,11 +35,11 @@ export class SupabaseDatabase {
             new OpenAIEmbeddings(),
             {
                 client: supabase,
-                tableName: ARXIV_EMBEDDINGS_TABLE,
+                tableName: 'arxiv_embeddings',
                 queryName: 'match_documents',
             }
         );
-        
+
     return new this(supabase, vectorStore);
     }
 
@@ -58,7 +55,7 @@ export class SupabaseDatabase {
         notes: ArxivPaperNote[];
     }) {
         const { data, error } = await this.client
-            .from(ARXIV_PAPERS_TABLE)
+            .from('arxiv-papers')
             .insert(
                 {
                 arxiv_url: paperUrl,

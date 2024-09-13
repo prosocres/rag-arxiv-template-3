@@ -6,9 +6,6 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export const ARXIV_EMBEDDINGS_TABLE = "arxiv_embeddings";
-export const ARXIV_PAPERS_TABLE = "arxiv_papers";
-
 export type Database = {
   public: {
     Tables: {
