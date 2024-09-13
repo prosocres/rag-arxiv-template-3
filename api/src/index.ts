@@ -40,35 +40,19 @@ async function convertPdfToDocuments(pdf: Buffer): Promise<Array<Document>> {
         throw new Error("Missing UNSTRUCTURED_API_KEY API key.")
     }
     const randomName = Math.random().toString(36).substring(7);
-    await writeFile(`pdfs/document.json`, pdf, 'utf-8');
-    console.log('after write')
+    await writeFile(`pdfs/${randomName}.pdf`, pdf, 'binary');
+    console.log('after write');
     const loader = new UnstructuredLoader(`pdfs/${randomName}.pdf`, {
         apiKey: process.env.UNSTRUCTURED_API_KEY,
         strategy: 'hi_res'
     })
     console.log('before load');
     const documents = await loader.load();
+    await writeFile(`pdfs/document.json`, JSON.stringify(documents), 'utf-8');
     console.log('after load');
     await unlink(`pdfs/${randomName}.pdf`);
     return documents;
 }
-
-// Convert PDF to JSON
-// async function convertPdfToJSON(pdf: Buffer): Promise<Array<Document>> {
-//     const pdfDoc = await PDFDocument.load(pdf);
-//     const pages = pdfDoc.getPages();
-//     const texts: string[] = [];
-//     for (const page of pages) {
-//         const content = await page.getTextContent();
-//         const pageText = content.items.map(item => item.str).join(' ');
-//         texts.push(pageText);
-//     }
-//     const jsonContent = JSON.stringify(texts, null, 2);
-//     await writeFile(`pdfs/document.json`, jsonContent, 'utf-8');
-//     return texts;
-// }
-
-
 
 async function generateNotes(
     documents: Array<Document>
@@ -88,8 +72,6 @@ async function generateNotes(
     return response;
 }
 
-
-
 async function main({
     paperUrl,
     name,
@@ -99,30 +81,25 @@ async function main({
     name: string
     pagesToDelete?: number[]
 }) {
-    if (!paperUrl.endsWith('pdf')) {
-        throw new Error('Not a pdf');
-    }
-    let pdfAsBuffer = await loadPdfFromUrl(paperUrl);
-    if (pagesToDelete && pagesToDelete.length > 0) {
-        pdfAsBuffer = await deletePages(pdfAsBuffer, pagesToDelete);
-    }
-    
-    const documents = await convertPdfToDocuments(pdfAsBuffer);
-    console.log('Buffered PDF');
-    // Call the function in the main function
-    //const documents = await convertPdfToJSON(pdfAsBuffer);
-    //console.log('Converted PDF to JSON');
+    // if (!paperUrl.endsWith('pdf')) {
+    //     throw new Error('Not a pdf');
+    // }
+    // let pdfAsBuffer = await loadPdfFromUrl(paperUrl);
+    // if (pagesToDelete && pagesToDelete.length > 0) {
+    //     pdfAsBuffer = await deletePages(pdfAsBuffer, pagesToDelete);
+    // }
+    // const documents = await convertPdfToDocuments(pdfAsBuffer);
     const docs = await readFile('pdfs/document.json', 'utf-8');
-    const parsedDocs: Array<Document> = JSON.parse(docs);
-    const notes = await generateNotes(parsedDocs);
-    //const notes = await generateNotes(documents);
+    const documents = JSON.parse(docs);
+    const notes = await generateNotes(documents);
+    console.log('generated notes');
     const database = await SupabaseDatabase.fromDocuments(documents);   
-    console.log('tableCreated');
+    console.log('instantiated database');
     await database.addPaper({
         paperUrl,
         name,
         paper: formatDocumentsAsString(documents),
-        notes
+        notes,
     });
     console.log('notes saved');
 }

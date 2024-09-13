@@ -8,6 +8,7 @@ import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { Document } from "langchain/document";
 import { ArxivPaperNote } from "prompts.js";
 
+
 export class SupabaseDatabase {
     vectorStore: SupabaseVectorStore;
 
@@ -20,6 +21,7 @@ export class SupabaseDatabase {
         this.vectorStore = vectorStore;
         this.client = client;
     }
+    
     static async fromDocuments(
         documents: Array<Document>
     ): Promise<SupabaseDatabase> {
@@ -39,7 +41,8 @@ export class SupabaseDatabase {
                 tableName: ARXIV_EMBEDDINGS_TABLE,
                 queryName: 'match_documents',
             }
-        )
+        );
+        
     return new this(supabase, vectorStore);
     }
 
