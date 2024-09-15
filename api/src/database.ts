@@ -30,6 +30,16 @@ export class SupabaseDatabase {
 
         const supabase = createClient<Database>(supabaseUrl, privateKey);
 
+        // const { data, error } = await supabase
+        //     .from('arxiv_embeddings')
+        //     .select('*');
+
+        // if (error) {
+        //     throw error;
+        // }
+
+        // console.log(data);
+
         const vectorStore = await SupabaseVectorStore.fromDocuments(
             documents,
             new OpenAIEmbeddings(),
