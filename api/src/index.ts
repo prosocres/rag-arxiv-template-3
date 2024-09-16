@@ -75,7 +75,7 @@ async function generateNotes(
 async function main({
     paperUrl,
     name,
-    //pagesToDelete
+    pagesToDelete
 }: {
     paperUrl: string
     name: string

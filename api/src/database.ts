@@ -28,6 +28,8 @@ export class SupabaseDatabase {
             throw new Error("Missing Supabase credentials");
         }
 
+        console.log('Supabase credentials populated');
+
         const supabase = createClient<Database>(supabaseUrl, privateKey);
 
         // const { data, error } = await supabase
@@ -39,6 +41,8 @@ export class SupabaseDatabase {
         // }
 
         // console.log(data);
+
+        // console.log(documents);
 
         const vectorStore = await SupabaseVectorStore.fromDocuments(
             documents,
