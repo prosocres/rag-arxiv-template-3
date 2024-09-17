@@ -32,18 +32,6 @@ export class SupabaseDatabase {
 
         const supabase = createClient<Database>(supabaseUrl, privateKey);
 
-        // const { data, error } = await supabase
-        //     .from('arxiv_embeddings')
-        //     .select('*');
-
-        // if (error) {
-        //     throw error;
-        // }
-
-        // console.log(data);
-
-        // console.log(documents);
-
         const vectorStore = await SupabaseVectorStore.fromDocuments(
             documents,
             new OpenAIEmbeddings(),
@@ -68,6 +56,7 @@ export class SupabaseDatabase {
         paper: string;
         notes: ArxivPaperNote[];
     }) {
+        console.log('adding paper');
         const { data, error } = await this.client
             .from('arxiv-papers')
             .insert(
@@ -76,9 +65,10 @@ export class SupabaseDatabase {
                 name,
                 paper,
                 notes
-            },
-        )
-        .select();
+                },
+            )
+            .select();
+  
         if (error) {
             throw error;
         }

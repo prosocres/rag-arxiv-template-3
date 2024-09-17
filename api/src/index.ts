@@ -48,7 +48,6 @@ async function convertPdfToDocuments(pdf: Buffer): Promise<Array<Document>> {
     })
     console.log('before load');
     const documents = await loader.load();
-    console.log(documents);
     await writeFile(`pdfs/document.json`, JSON.stringify(documents), 'utf-8');
     console.log('after load');
     await unlink(`pdfs/${randomName}.pdf`);
@@ -82,28 +81,27 @@ async function main({
     name: string
     pagesToDelete?: number[]
 }) {
-    if (!paperUrl.endsWith('pdf')) {
-        throw new Error('Not a pdf');
-    }
-    let pdfAsBuffer = await loadPdfFromUrl(paperUrl);
-    if (pagesToDelete && pagesToDelete.length > 0) {
-        pdfAsBuffer = await deletePages(pdfAsBuffer, pagesToDelete);
-    }
-    const documents = await convertPdfToDocuments(pdfAsBuffer);
-    // const docs = await readFile('pdfs/document.json', 'utf-8');
-    // const documents = JSON.parse(docs);
-    // console.log(typeof documents);
-    // console.log(documents[18]);
-    // const notes = await generateNotes(documents);
-    // console.log('generated notes');
-    // const database = await SupabaseDatabase.fromDocuments(documents);   
-    // console.log('instantiated database');
-    // await database.addPaper({
-    //     paperUrl,
-    //     name,
-    //     paper: formatDocumentsAsString(documents),
-    //     notes,
-    // });
-    // console.log('notes saved');
+    // if (!paperUrl.endsWith('pdf')) {
+    //     throw new Error('Not a pdf');
+    // }
+    // let pdfAsBuffer = await loadPdfFromUrl(paperUrl);
+    // if (pagesToDelete && pagesToDelete.length > 0) {
+    //     pdfAsBuffer = await deletePages(pdfAsBuffer, pagesToDelete);
+    // }
+    // const documents = await convertPdfToDocuments(pdfAsBuffer);
+    // console.log(documents);
+    const docs = await readFile('pdfs/document.json', 'utf-8');
+    const documents = JSON.parse(docs);
+    const notes = await generateNotes(documents);
+    console.log('generated notes');
+    const database = await SupabaseDatabase.fromDocuments(documents);   
+    console.log('instantiated database');
+    await database.addPaper({
+        paperUrl,
+        name,
+        paper: formatDocumentsAsString(documents),
+        notes,
+    });
+    console.log('notes saved');
 }
 main({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test' });
