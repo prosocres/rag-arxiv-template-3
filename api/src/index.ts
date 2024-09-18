@@ -13,7 +13,6 @@ import { ArxivPaperNote,
     outputParser } from 'prompts.js';
 import { SupabaseDatabase } from 'database.js';
 
-
 async function deletePages(
     pdf: Buffer, 
     pagesToDelete: number[]
@@ -41,15 +40,12 @@ async function convertPdfToDocuments(pdf: Buffer): Promise<Array<Document>> {
     }
     const randomName = Math.random().toString(36).substring(7);
     await writeFile(`pdfs/${randomName}.pdf`, pdf, 'binary');
-    console.log('after write');
     const loader = new UnstructuredLoader(`pdfs/${randomName}.pdf`, {
         apiKey: process.env.UNSTRUCTURED_API_KEY,
         strategy: 'hi_res'
     })
-    console.log('before load');
     const documents = await loader.load();
     await writeFile(`pdfs/document.json`, JSON.stringify(documents), 'utf-8');
-    console.log('after load');
     await unlink(`pdfs/${randomName}.pdf`);
     return documents;
 }
@@ -77,9 +73,9 @@ async function main({
     name,
     pagesToDelete
 }: {
-    paperUrl: string
-    name: string
-    pagesToDelete?: number[]
+    paperUrl: string;
+    name: string;
+    pagesToDelete?: number[];
 }) {
     // if (!paperUrl.endsWith('pdf')) {
     //     throw new Error('Not a pdf');
@@ -93,7 +89,6 @@ async function main({
     const docs = await readFile('pdfs/document.json', 'utf-8');
     const documents = JSON.parse(docs);
     const notes = await generateNotes(documents);
-    console.log('generated notes');
     const database = await SupabaseDatabase.fromDocuments(documents);   
     console.log('instantiated database');
     await database.addPaper({

@@ -49,29 +49,26 @@ export class SupabaseDatabase {
         paperUrl,
         name,
         paper,
-        notes
+        notes,
     }: {
         paperUrl: string;
         name: string;
         paper: string;
         notes: ArxivPaperNote[];
     }) {
-        console.log('adding paper');
         const { data, error } = await this.client
             .from('arxiv-papers')
-            .insert(
-                {
+            .insert({
                 arxiv_url: paperUrl,
                 name,
                 paper,
-                notes
-                },
-            )
+                notes,
+            })
             .select();
-  
         if (error) {
+            console.log('Error inserting paper to database.');
             throw error;
         }
         console.log(data);
     }
-};
+}

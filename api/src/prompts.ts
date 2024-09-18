@@ -65,12 +65,10 @@ export type ArxivPaperNote = {
 export const outputParser = (
     output: BaseMessageChunk
 ): Array<ArxivPaperNote> => {
-    console.log('output', output);
     const toolCalls = output.additional_kwargs.tool_calls;
     if (!toolCalls || toolCalls.length === 0) {
         throw new Error('No tool calls');
     }
-    console.log('toolCalls', toolCalls)
     const notes: Array<ArxivPaperNote> = toolCalls.map((call) => {
         const { notes } = JSON.parse(call.function.arguments);
         return notes;
