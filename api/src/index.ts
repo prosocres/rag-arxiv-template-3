@@ -68,7 +68,7 @@ async function generateNotes(
     return response;
 }
 
-async function main({
+export async function main({
     paperUrl,
     name,
     pagesToDelete
@@ -91,12 +91,15 @@ async function main({
     const notes = await generateNotes(documents);
     const database = await SupabaseDatabase.fromDocuments(documents);   
     console.log('instantiated database');
-    await database.addPaper({
-        paperUrl,
-        name,
-        paper: formatDocumentsAsString(documents),
-        notes,
-    });
-    console.log('notes saved');
+    await Promise.all([
+        database.addPaper({
+            paperUrl,
+            name,
+            paper: formatDocumentsAsString(documents),
+            notes,
+        }),
+        database.vectorStore.addDocuments(documents),
+    ]);
+    return notes;
 }
 main({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test' });
