@@ -85,5 +85,5 @@ export class SupabaseDatabase {
             throw new Error(error.message);
         }
         return data[0];
-    } 
+    }
 }
