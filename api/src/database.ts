@@ -71,4 +71,19 @@ export class SupabaseDatabase {
             throw new Error(error.message);
         }
     }
+
+    async getPaper(
+        url: string
+    ): Promise<Database['public']['Tables']['arxiv_papers']['Row']> {
+        const {data, error} = await this.client 
+        .from('arxiv_papers')
+        .select()
+        .eq('arxiv_url', url);
+
+        if (error || !data) {
+            console.log("Error getting database");
+            throw new Error(error.message);
+        }
+        return data[0];
+    } 
 }
