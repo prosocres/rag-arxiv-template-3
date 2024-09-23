@@ -68,29 +68,22 @@ async function generateNotes(
     return response;
 }
 
-export async function main({
-    paperUrl,
-    name,
-    pagesToDelete
-}: {
-    paperUrl: string;
-    name: string;
-    pagesToDelete?: number[];
-}) {
-    // if (!paperUrl.endsWith('pdf')) {
-    //     throw new Error('Not a pdf');
-    // }
-    // let pdfAsBuffer = await loadPdfFromUrl(paperUrl);
-    // if (pagesToDelete && pagesToDelete.length > 0) {
-    //     pdfAsBuffer = await deletePages(pdfAsBuffer, pagesToDelete);
-    // }
-    // const documents = await convertPdfToDocuments(pdfAsBuffer);
-    // console.log(documents);
-    const docs = await readFile('pdfs/document.json', 'utf-8');
-    const documents = JSON.parse(docs);
+
+
+
+
+export async function takeNotes(
+    paperUrl: string,
+    name: string,
+    pagesToDelete?: number[]
+) {
+    let pdfAsBuffer = await loadPdfFromUrl(paperUrl);
+    if (pagesToDelete && pagesToDelete.length > 0) {
+        pdfAsBuffer = await deletePages(pdfAsBuffer, pagesToDelete);
+    }
+    const documents = await convertPdfToDocuments(pdfAsBuffer);
     const notes = await generateNotes(documents);
     const database = await SupabaseDatabase.fromDocuments(documents);   
-    console.log('instantiated database');
     await Promise.all([
         database.addPaper({
             paperUrl,
@@ -102,4 +95,5 @@ export async function main({
     ]);
     return notes;
 }
-main({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test' });
+
+// takeNotes({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test' });
