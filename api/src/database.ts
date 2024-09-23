@@ -4,7 +4,10 @@ import { Database } from "generated.js";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { Document } from "langchain/document";
-import { ArxivPaperNote } from "prompts.js";
+import { ArxivPaperNote } from "notes/prompts.js";
+
+
+
 
 export class SupabaseDatabase {
     vectorStore: SupabaseVectorStore;
@@ -19,9 +22,7 @@ export class SupabaseDatabase {
         this.client = client;
     }
     
-    static async fromDocuments(
-        documents: Array<Document>
-    ): Promise<SupabaseDatabase> {
+    static async fromExistingIndex(): Promise<SupabaseDatabase> {
         const privateKey = process.env.SUPABASE_PRIVATE_KEY;
         const supabaseUrl = process.env.SUPABASE_URL;
         if (!privateKey || !supabaseUrl) {
@@ -32,8 +33,7 @@ export class SupabaseDatabase {
 
         const supabase = createClient<Database>(supabaseUrl, privateKey);
 
-        const vectorStore = await SupabaseVectorStore.fromDocuments(
-            documents,
+        const vectorStore = await SupabaseVectorStore.fromExistingIndex(
             new OpenAIEmbeddings(),
             {
                 client: supabase,

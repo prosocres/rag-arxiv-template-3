@@ -1,5 +1,5 @@
 import express from 'express';
-import { takeNotes } from 'index.js';
+import { takeNotes } from 'notes/index.js';
 
 function main() {
     const app = express();
