@@ -95,5 +95,3 @@ export async function takeNotes(
     ]);
     return notes;
 }
-
-// takeNotes({ paperUrl: 'https://arxiv.org/pdf/2305.15334.pdf', name: 'test' });
