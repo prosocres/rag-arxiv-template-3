@@ -25,25 +25,29 @@ async function qaModel(
     const chain = 
         QA_OVER_PAPER_PROMPT.pipe(modelWithTool).pipe(answerOutputParser);
     const documentsAsString = formatDocumentsAsString(documents);
-    const notesAsString = notes.map((note) => note.note).join("\n");
+    const notesAsString = notes.map((note) => note.note).join('\n');
     const response = await chain.invoke({
         relevantDocuments: documentsAsString,
         notes: notesAsString,
-        question
+        question,
     });
 
     return response;
 }
 
-async function qaOnPaper(question: string, paperUrl: string
+export async function qaOnPaper(question: string, paperUrl: string
 ) {
     const database = await SupabaseDatabase.fromExistingIndex();
     const documents =  await database.vectorStore.similaritySearch(question, 8, {
         url: paperUrl, 
     });
     const { notes } = await database.getPaper(paperUrl);
-    return qaModel(
+    const answerAndQuestions = await qaModel(
         question,
         documents, 
         notes as unknown as Array<ArxivPaperNote>);
+    await Promise.all(answerAndQuestions.map(async (qa) => 
+    await database.saveQa(question, qa.answer, formatDocumentsAsString(documents), qa.followupQuestions)
+    ));
+    return answerAndQuestions;
 }

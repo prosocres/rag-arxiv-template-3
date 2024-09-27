@@ -81,9 +81,30 @@ export class SupabaseDatabase {
         .eq('arxiv_url', url);
 
         if (error || !data) {
-            console.log("Error getting database");
+            console.error("Error getting database");
             throw new Error(error.message);
         }
         return data[0];
+    }
+
+    async saveQa(
+        question: string,
+        answer: string,
+        context: string,
+        followupQuestions: string[]
+    ) {
+        const { data, error } = await this.client
+        .from('arxiv_question_answering')
+        .insert({
+            question,
+            answer,
+            context,
+            followupQuestions: followupQuestions,
+        });
+        ;
+
+        if (error) {
+            throw new Error(error.message);
+        }
     }
 }
