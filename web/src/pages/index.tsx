@@ -16,24 +16,43 @@ export default function Home() {
   const submitPaperForm = useForm<z.infer<typeof submitPaperFormSchema>>({
     resolver: zodResolver(submitPaperFormSchema),
   })
+
+  function onPaperSubmit(_values: z.infer<typeof submitPaperFormSchema>) {
+  }
   
   return (
     <div className="flex flex-row gap-5">
       {/** Add paper */}
-      <div className="flex flex-col gap-2 border-[1px] border-gray-400 rounded-md"></div>
+      <div className="flex flex-col gap-2 border-[1px] border-gray-400 rounded-md">
         <Form {...submitPaperForm}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={submitPaperForm.handleSubmit(onPaperSubmit)} className="space-y-8">
           <FormField
             control={submitPaperForm.control}
-            name="username"
+            name="paperUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Paper URL</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="https://arxiv.org/pdf/2305.15334.pdf" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name.
+                  The URL to the PDF paper you want to submit.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={submitPaperForm.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Gorilla: Large Language Model Connected with Massive APIs" {...field} />
+                </FormControl>
+                <FormDescription>
+                  The name of the paper you want to submit.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -44,6 +63,7 @@ export default function Home() {
       </Form>
       {/** QA on paper */}
       <div></div>
+      </div>
     </div>
   );
 }
