@@ -23,47 +23,47 @@ export default function Home() {
   return (
     <div className="flex flex-row gap-5">
       {/** Add paper */}
-      <div className="flex flex-col gap-2 border-[1px] border-gray-400 rounded-md">
+      <div className="flex flex-col gap-2 border-[1px] border-gray-400 rounded-md p-2">
         <Form {...submitPaperForm}>
-        <form onSubmit={submitPaperForm.handleSubmit(onPaperSubmit)} className="space-y-8">
-          <FormField
-            control={submitPaperForm.control}
-            name="paperUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Paper URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://arxiv.org/pdf/2305.15334.pdf" {...field} />
-                </FormControl>
-                <FormDescription>
-                  The URL to the PDF paper you want to submit.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={submitPaperForm.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Gorilla: Large Language Model Connected with Massive APIs" {...field} />
-                </FormControl>
-                <FormDescription>
-                  The name of the paper you want to submit.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+          <form onSubmit={submitPaperForm.handleSubmit(onPaperSubmit)} className="space-y-8">
+            <FormField
+              control={submitPaperForm.control}
+              name="paperUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Paper URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://arxiv.org/pdf/2305.15334.pdf" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The URL to the PDF paper you want to submit.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={submitPaperForm.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Gorilla: Large Language Model Connected with Massive APIs" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The name of the paper you want to submit.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
+      </div>
       {/** QA on paper */}
       <div></div>
-      </div>
     </div>
   );
 }
