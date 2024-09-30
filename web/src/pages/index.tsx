@@ -1,15 +1,20 @@
 import { z } from "zod"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { pages } from "next/dist/build/templates/app-page";
 import { useForm } from "react-hook-form";
+import { ChevronsUpDown, Plus, X } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const submitPaperFormSchema = z.object({
   paperUrl: z.string(),
   name: z.string(),
-  pagesToDelete: z.array(z.number()).optional(),
+  pagesToDelete: z.string().optional(),
 })
 
 export default function Home() {
@@ -17,7 +22,8 @@ export default function Home() {
     resolver: zodResolver(submitPaperFormSchema),
   })
 
-  function onPaperSubmit(_values: z.infer<typeof submitPaperFormSchema>) {
+  function onPaperSubmit(values: z.infer<typeof submitPaperFormSchema>) {
+    console.log("submit paper", values)
   }
   
   return (
@@ -58,6 +64,33 @@ export default function Home() {
                 </FormItem>
               )}
             />
+            <Collapsible>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <p className="font-normal">Delete pages?</p>
+                  <ChevronsUpDown className="h-4 w-4" />
+                  <span className="sr-only">Toggle</span>
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <FormField
+                control={submitPaperForm.control}
+                name="pagesToDelete"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Pages to delete</FormLabel>
+                    <FormControl>
+                      <Input placeholder="10, 11, 12" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Pagse to delete from the paper.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+              </CollapsibleContent>
+            </Collapsible>
             <Button type="submit">Submit</Button>
           </form>
         </Form>
