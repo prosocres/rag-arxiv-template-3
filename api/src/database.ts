@@ -99,7 +99,7 @@ export class SupabaseDatabase {
             question,
             answer,
             context,
-            followupQuestions: followupQuestions,
+            followup_questions: followupQuestions,
         });
         ;
 
