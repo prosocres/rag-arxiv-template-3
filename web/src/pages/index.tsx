@@ -7,9 +7,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { ChevronsUpDown, Plus, X } from "lucide-react"
+import { set, useForm } from "react-hook-form";
+import { ChevronsUpDown } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { ArxivPaperNote } from "./api/take_notes";
 
 const submitPaperFormSchema = z.object({
   paperUrl: z.string(),
@@ -17,13 +19,45 @@ const submitPaperFormSchema = z.object({
   pagesToDelete: z.string().optional(),
 })
 
+function processPagesToDelete(pagesToDelete: string): Array<number> {
+  const numArr = pagesToDelete.split(",").map((num) => parseInt(num.trim()));
+  return numArr;
+}
+
+type SubmittedPaperData = {
+  paperUrl: string;
+  name: string;
+  pagesToDelete?: Array<number>;
+}
+
 export default function Home() {
+  const [submittedPaperData, setSubmittedPaperData] = useState <SubmittedPaperData | undefined>();
+  const [notes, setNotes] = useState<Array<ArxivPaperNote> | undefined>();
   const submitPaperForm = useForm<z.infer<typeof submitPaperFormSchema>>({
     resolver: zodResolver(submitPaperFormSchema),
   })
 
-  function onPaperSubmit(values: z.infer<typeof submitPaperFormSchema>) {
-    console.log("submit paper", values)
+  async function onPaperSubmit(values: z.infer<typeof submitPaperFormSchema>) {
+    setSubmittedPaperData({
+      ...values,
+      pagesToDelete: values.pagesToDelete ? processPagesToDelete(values.pagesToDelete) : undefined,
+    });
+    const response = await fetch("/api/take_notes", {
+      method: "POST",
+      body: JSON.stringify(values),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return null;
+    });
+    if (response) {
+      console.log(response.data);
+      setNotes(response.data);
+    } else {
+      throw new Error("Something went wrong taking notes.");
+    }
+    ;
   }
   
   return (

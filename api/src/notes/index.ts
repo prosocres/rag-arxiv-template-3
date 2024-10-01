@@ -2,8 +2,7 @@ import axios from 'axios';
 import { PDFDocument } from 'pdf-lib';
 import { Document } from "langchain/document";
 import { writeFile, 
-    unlink, 
-    readFile } from "fs/promises";
+    unlink } from "fs/promises";
 import { UnstructuredLoader } from 'langchain/document_loaders/fs/unstructured';
 import { formatDocumentsAsString } from 'langchain/util/document';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
