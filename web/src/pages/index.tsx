@@ -52,12 +52,11 @@ export default function Home() {
       return null;
     });
     if (response) {
-      console.log(response.data);
-      setNotes(response.data);
+      console.log(response);
+      setNotes(response);
     } else {
       throw new Error("Something went wrong taking notes.");
     }
-    ;
   }
   
   return (
