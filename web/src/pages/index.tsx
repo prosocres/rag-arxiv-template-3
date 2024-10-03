@@ -52,7 +52,7 @@ export default function Home() {
       return null;
     });
     if (response) {
-      console.log(response);
+      console.log(`Response: ${response}`);
       setNotes(response);
     } else {
       throw new Error("Something went wrong taking notes.");
@@ -130,6 +130,20 @@ export default function Home() {
       </div>
       {/** QA on paper */}
       <div></div>
+      {notes && notes.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <h2>Notes</h2>
+          <div className="flex flex-col gap-2">
+            {notes.map((note, index) => (
+              <div className="flex flex-col gap-2 p-2" key={index}>
+                <p>{index + 1}. {note.note}</p>
+                {/**<p className = "text-sm text-gray-600">[{note.pageNumbers.join(", ")}]</p>*/}
+              </div>
+            ))}
+          </div>
+        </div>
+      )} 
+      
     </div>
   );
 }
