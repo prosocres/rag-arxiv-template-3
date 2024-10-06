@@ -54,13 +54,18 @@ export default function Home() {
     if (response) {
       console.log(`Response: ${response}`);
       setNotes(response);
+      console.log(notes);
+      if (notes && notes.length > 0) {
+        console.log(notes[0]);
+      }
     } else {
       throw new Error("Something went wrong taking notes.");
     }
   }
   
   return (
-    <div className="flex flex-row gap-5">
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-row gap-5">
       {/** Add paper */}
       <div className="flex flex-col gap-2 border-[1px] border-gray-400 rounded-md p-2">
         <Form {...submitPaperForm}>
@@ -130,20 +135,20 @@ export default function Home() {
       </div>
       {/** QA on paper */}
       <div></div>
+      </div>
       {notes && notes.length > 0 && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 max-w-[600px]">
           <h2>Notes</h2>
           <div className="flex flex-col gap-2">
             {notes.map((note, index) => (
               <div className="flex flex-col gap-2 p-2" key={index}>
                 <p>{index + 1}. {note.note}</p>
-                {/**<p className = "text-sm text-gray-600">[{note.pageNumbers.join(", ")}]</p>*/}
+                <p className = "text-sm text-gray-600">[{note.pageNumbers.join(", ")}]</p>
               </div>
             ))}
           </div>
         </div>
       )} 
-      
     </div>
   );
 }

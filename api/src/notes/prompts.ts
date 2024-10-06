@@ -69,9 +69,10 @@ export const outputParser = (
     if (!toolCalls || toolCalls.length === 0) {
         throw new Error('No tool calls');
     }
-    const notes: Array<ArxivPaperNote> = toolCalls.map((call) => {
+    const notes = toolCalls.map((call) => {
         const { notes } = JSON.parse(call.function.arguments);
         return notes;
-    });
+    })
+    .flat();
     return notes;
 }; 
