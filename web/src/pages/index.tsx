@@ -52,12 +52,8 @@ export default function Home() {
       return null;
     });
     if (response) {
-      console.log(`Response: ${response}`);
+      console.log(response);
       setNotes(response);
-      console.log(notes);
-      if (notes && notes.length > 0) {
-        console.log(notes[0]);
-      }
     } else {
       throw new Error("Something went wrong taking notes.");
     }
