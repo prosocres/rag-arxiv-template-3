@@ -107,4 +107,15 @@ export class SupabaseDatabase {
             throw new Error(error.message);
         }
     }
+
+    async getPaperByURL(url: string) {
+        const {data, error} = await this.client
+            .from('arxiv_papers')
+            .select()
+            .eq('arxiv_url', url);
+        if (error || !data) {
+            console.error('Error getting data from database');
+            throw error;
+        }
+    }
 }
