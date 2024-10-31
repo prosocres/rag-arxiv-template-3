@@ -189,38 +189,40 @@ export default function Home() {
           </Form>
         </div>
       </div>
-      {answers && answers.length > 0 && (
-        <div className="flex flex-col gap-2 max-w-[600px]">
-          <h2>Answers</h2>
-          <div className="flex flex-col gap-2">
-            {answers.map((answer, index) => (
-              <div className="flex flex-col gap-2 p-2" key={index}>
-                <p>{index + 1}. {answer.answer}</p>
-                <p>Followup questions:</p>
-                <div className="flex flex-col gap-2 p-2">
-                  {answer.followupQuestions.map((followup, index) => (
-                    <p key={index} className = "text-sm text-gray-600">followup</p>
-                  ))}
+      <div className="flex flex-row gap-2 mt-3">
+        {notes && notes.length > 0 && (
+          <div className="flex flex-col gap-2 max-w-[600px]">
+            <h2>Notes</h2>
+            <div className="flex flex-col gap-2">
+              {notes.map((note, index) => (
+                <div className="flex flex-col gap-2 p-2" key={index}>
+                  <p>{index + 1}. {note.note}</p>
+                  <p className = "text-sm text-gray-600">[{note.pageNumbers.join(", ")}]</p>
                 </div>
-                
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-      {notes && notes.length > 0 && (
-        <div className="flex flex-col gap-2 max-w-[600px]">
-          <h2>Notes</h2>
-          <div className="flex flex-col gap-2">
-            {notes.map((note, index) => (
-              <div className="flex flex-col gap-2 p-2" key={index}>
-                <p>{index + 1}. {note.note}</p>
-                <p className = "text-sm text-gray-600">[{note.pageNumbers.join(", ")}]</p>
-              </div>
-            ))}
+        )} 
+        {answers && answers.length > 0 && (
+          <div className="flex flex-col gap-2 max-w-[600px]">
+            <h2>Answers</h2>
+            <div className="flex flex-col gap-2">
+              {answers.map((answer, index) => (
+                <div className="flex flex-col gap-2 p-2" key={index}>
+                  <p>{index + 1}. {answer.answer}</p>
+                  <p>Followup questions:</p>
+                  <div className="flex flex-col gap-2 p-2">
+                    {answer.followupQuestions.map((followup, index) => (
+                      <p key={index} className = "text-sm text-gray-600">{followup}</p>
+                    ))}
+                  </div>
+                  
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )} 
+        )}
+      </div>
     </div>
   );
 }

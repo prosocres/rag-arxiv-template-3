@@ -74,7 +74,7 @@ export class SupabaseDatabase {
 
     async getPaper(
         url: string
-    ): Promise<Database['public']['Tables']['arxiv_papers']['Row']> {
+    ): Promise<Database['public']['Tables']['arxiv_papers']['Row'] | null> {
         const {data, error} = await this.client 
         .from('arxiv_papers')
         .select()
@@ -82,7 +82,7 @@ export class SupabaseDatabase {
 
         if (error || !data) {
             console.error("Error getting database");
-            throw new Error(error.message);
+            return null;
         }
         return data[0];
     }
@@ -105,17 +105,6 @@ export class SupabaseDatabase {
 
         if (error) {
             throw new Error(error.message);
-        }
-    }
-
-    async getPaperByURL(url: string) {
-        const {data, error} = await this.client
-            .from('arxiv_papers')
-            .select()
-            .eq('arxiv_url', url);
-        if (error || !data) {
-            console.error('Error getting data from database');
-            throw error;
         }
     }
 }

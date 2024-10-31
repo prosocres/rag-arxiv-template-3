@@ -77,6 +77,10 @@ export async function takeNotes(
     pagesToDelete?: number[]
 ): Promise<ArxivPaperNote[]> {
     const database = await SupabaseDatabase.fromExistingIndex(); 
+    const existingPaper = await database.getPaper(paperUrl);
+    if(existingPaper) {
+        return existingPaper.notes as Array<ArxivPaperNote>;
+    }
 
     let pdfAsBuffer = await loadPdfFromUrl(paperUrl);
     if (pagesToDelete && pagesToDelete.length > 0) {
